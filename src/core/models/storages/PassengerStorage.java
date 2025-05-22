@@ -20,26 +20,25 @@ import org.json.JSONObject;
  * @author DANIEL
  */
 public class PassengerStorage {
-    // Instancia Singleton
+    
     private static PassengerStorage instance;
-
-    // Atributos del Storage
+    
     private ArrayList<Passenger> passengers;
-
+    
     private static final String FILE_PATH = "json/passengers.json";
-
+    
     private PassengerStorage() {
         this.passengers = new ArrayList<>();
         load();
     }
-
+    
     public static PassengerStorage getInstance() {
         if (instance == null) {
             instance = new PassengerStorage();
         }
         return instance;
     }
-
+    
     public boolean addPassenger(Passenger passenger) {
         for (Passenger p : this.passengers) {
             if (p.getId() == passenger.getId()) {
@@ -50,7 +49,7 @@ public class PassengerStorage {
         save();
         return true;
     }
-
+    
     public Passenger getPassenger(long id) {
         for (Passenger passenger : this.passengers) {
             if (passenger.getId() == id) {
@@ -59,7 +58,7 @@ public class PassengerStorage {
         }
         return null;
     }
-
+    
     public void load() {
         try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
             StringBuilder jsonText = new StringBuilder();
@@ -71,7 +70,7 @@ public class PassengerStorage {
             JSONArray array = new JSONArray(jsonText.toString());
             for (int i = 0; i < array.length(); i++) {
                 JSONObject obj = array.getJSONObject(i);
-                passengers.add(Passenger.fromJson(obj));
+                passengers.add(Passenger.fromJson(obj)); 
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -81,7 +80,7 @@ public class PassengerStorage {
     public void save() {
         JSONArray array = new JSONArray();
         for (Passenger passenger : passengers) {
-            array.put(passenger.toJson());
+            array.put(passenger.toJson()); 
         }
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
@@ -94,6 +93,6 @@ public class PassengerStorage {
     public ArrayList<Passenger> getPassengers() {
         passengers.sort(Comparator.comparing(Passenger::getId));
         return passengers;
-    
     }
+    
 }

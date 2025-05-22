@@ -20,10 +20,9 @@ import org.json.JSONObject;
  * @author DANIEL
  */
 public class PlaneStorage {
-    // Instancia Singleton
-    private static PlaneStorage instance;
     
-    // Atributos del Storage
+    private static PlaneStorage instance;
+
     private ArrayList<Plane> planes;
     
     private static final String FILE_PATH = "json/planes.json";
@@ -95,6 +94,5 @@ public class PlaneStorage {
         planes.sort(Comparator.comparing(Plane::getId));
         return planes;
     }
+    
 }
-
-

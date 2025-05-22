@@ -4,7 +4,6 @@
  */
 package core.models;
 
-import core.models.Flight;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -139,4 +138,5 @@ public class Passenger {
     public int getNumFlights() {
         return flights.size();
     }
+    
 }

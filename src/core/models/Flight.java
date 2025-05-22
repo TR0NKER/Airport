@@ -17,7 +17,8 @@ import org.json.JSONObject;
  * @author edangulo
  */
 public class Flight {
-private final String id;
+
+    private final String id;
     private ArrayList<Passenger> passengers;
     private Plane plane;
     private Location departureLocation;

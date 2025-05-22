@@ -11,7 +11,7 @@ import org.json.JSONObject;
  * @author edangulo
  */
 public class Location {
-    
+
     private final String airportId;
     private String airportName;
     private String airportCity;
@@ -76,4 +76,5 @@ public class Location {
     public double getAirportLongitude() {
         return airportLongitude;
     }
+    
 }

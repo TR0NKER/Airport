@@ -20,10 +20,9 @@ import org.json.JSONObject;
  * @author DANIEL
  */
 public class FlightStorage {
-    // Instancia Singleton
+    
     private static FlightStorage instance;
     
-    // Atributos del Storage
     private ArrayList<Flight> flights;
     
     private static final String FILE_PATH = "json/flights.json";
@@ -98,4 +97,3 @@ public class FlightStorage {
     
     
 }
-

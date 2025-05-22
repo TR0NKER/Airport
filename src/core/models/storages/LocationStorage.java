@@ -20,10 +20,9 @@ import org.json.JSONObject;
  * @author DANIEL
  */
 public class LocationStorage {
-    // Instancia Singleton
+    
     private static LocationStorage instance;
     
-    // Atributos del Storage
     private ArrayList<Location> locations;
     
     private static final String FILE_PATH = "json/locations.json";
@@ -95,4 +94,5 @@ public class LocationStorage {
         locations.sort(Comparator.comparing(Location::getAirportId));
         return locations;
     }
+    
 }
