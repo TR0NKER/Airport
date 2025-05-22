@@ -2,9 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package airport;
+package core.models;
 
+import core.models.Flight;
 import java.util.ArrayList;
+import org.json.JSONObject;
 
 /**
  *
@@ -26,6 +28,29 @@ public class Plane {
         this.maxCapacity = maxCapacity;
         this.airline = airline;
         this.flights = new ArrayList<>();
+    }
+    
+    public static Plane fromJson(JSONObject obj) {
+
+        String id = obj.getString("id");
+        String brand = obj.getString("brand");
+        String model = obj.getString("model");
+        int maxCapacity = obj.getInt("maxCapacity");
+        String airline = obj.getString("airline");
+
+        return new Plane(id, brand, model, maxCapacity, airline);
+    }
+    
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+
+        obj.put("id", id);
+        obj.put("brand", brand);
+        obj.put("model", model);
+        obj.put("maxCapacity", maxCapacity);
+        obj.put("airline", airline);
+
+        return obj;
     }
 
     public void addFlight(Flight flight) {
@@ -59,5 +84,4 @@ public class Plane {
     public int getNumFlights() {
         return flights.size();
     }
-    
 }

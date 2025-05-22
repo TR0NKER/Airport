@@ -2,7 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package airport;
+package core.models;
+
+import org.json.JSONObject;
 
 /**
  *
@@ -24,6 +26,31 @@ public class Location {
         this.airportCountry = airportCountry;
         this.airportLatitude = airportLatitude;
         this.airportLongitude = airportLongitude;
+    }
+
+    public static Location fromJson(JSONObject obj) {
+
+        String airportId = obj.getString("airportId");
+        String airportName = obj.getString("airportName");
+        String airportCity = obj.getString("airportCity");
+        String airportCountry = obj.getString("airportCountry");
+        double airportLatitude = obj.getDouble("airportLatitude");
+        double airportLongitude = obj.getDouble("airportLongitude");
+
+        return new Location(airportId, airportName, airportCity, airportCountry, airportLatitude, airportLongitude);
+    }
+    
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+
+        obj.put("airportId", airportId);
+        obj.put("airportName", airportName);
+        obj.put("airportCity", airportCity);
+        obj.put("airportCountry", airportCountry);
+        obj.put("airportLatitude", airportLatitude);
+        obj.put("airportLongitude", airportLongitude);
+
+        return obj;
     }
 
     public String getAirportId() {
@@ -49,5 +76,4 @@ public class Location {
     public double getAirportLongitude() {
         return airportLongitude;
     }
-    
 }

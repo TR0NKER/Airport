@@ -2,11 +2,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package airport;
+package core.models;
 
+import core.models.Flight;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
+import org.json.JSONObject;
 
 /**
  *
@@ -33,8 +35,36 @@ public class Passenger {
         this.country = country;
         this.flights = new ArrayList<>();
     }
+    
+    public static Passenger fromJson(JSONObject obj) {
+
+        long id = obj.getLong("id");
+        String firstname = obj.getString("firstname");
+        String lastname = obj.getString("lastname");
+        LocalDate birthDate = LocalDate.parse(obj.getString("birthDate"));
+        int countryPhoneCode = obj.getInt("countryPhoneCode");
+        long phone = obj.getLong("phone");
+        String country = obj.getString("country");
+        
+        return new Passenger(id, firstname, lastname, birthDate, countryPhoneCode, phone, country);
+    }
+
+    public JSONObject toJson() {
+        JSONObject obj = new JSONObject();
+
+        obj.put("id", id);
+        obj.put("firstname", firstname);
+        obj.put("lastname", lastname);
+        obj.put("birthDate", birthDate);
+        obj.put("countryPhoneCode", countryPhoneCode);
+        obj.put("phone", phone);
+        obj.put("country", country);
+
+        return obj;
+    }
 
     public void addFlight(Flight flight) {
+        flight.addPassenger(this);
         this.flights.add(flight);
     }
     
@@ -109,5 +139,4 @@ public class Passenger {
     public int getNumFlights() {
         return flights.size();
     }
-    
 }
