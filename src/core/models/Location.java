@@ -8,7 +8,7 @@ package core.models;
  *
  * @author edangulo
  */
-public class Location {
+public class Location implements Cloneable{
 
     private final String airportId;
     private String airportName;

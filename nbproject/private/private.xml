@@ -24,6 +24,14 @@
             <file>file:/C:/Users/HP/OneDrive/Documentos/NetBeansProjects/Airport/src/core/models/factories/FlightFactory.java</file>
             <file>file:/C:/Users/HP/OneDrive/Documentos/NetBeansProjects/Airport/src/core/models/factories/PassengerFactory.java</file>
             <file>file:/C:/Users/HP/OneDrive/Documentos/NetBeansProjects/Airport/src/core/models/factories/PlaneFactory.java</file>
+            <file>file:/C:/Users/HP/OneDrive/Documentos/NetBeansProjects/Airport/src/core/models/persistences/LocationPersistence/LocationPersistence.java</file>
+            <file>file:/C:/Users/HP/OneDrive/Documentos/NetBeansProjects/Airport/src/core/models/persistences/LocationPersistence/LocationJSONPersistence.java</file>
+            <file>file:/C:/Users/HP/OneDrive/Documentos/NetBeansProjects/Airport/src/core/models/persistences/FlightPersistence/FlightPersistence.java</file>
+            <file>file:/C:/Users/HP/OneDrive/Documentos/NetBeansProjects/Airport/src/core/models/persistences/FlightPersistence/FlightJSONPersistence.java</file>
+            <file>file:/C:/Users/HP/OneDrive/Documentos/NetBeansProjects/Airport/src/core/models/persistences/PassengerPersistence/PassengerPersistence.java</file>
+            <file>file:/C:/Users/HP/OneDrive/Documentos/NetBeansProjects/Airport/src/core/models/persistences/PassengerPersistence/PassengerJSONPersistence.java</file>
+            <file>file:/C:/Users/HP/OneDrive/Documentos/NetBeansProjects/Airport/src/core/models/persistences/PlanePersistence/PlanePersistence.java</file>
+            <file>file:/C:/Users/HP/OneDrive/Documentos/NetBeansProjects/Airport/src/core/models/persistences/PlanePersistence/PlaneJSONPersistence.java</file>
         </group>
     </open-files>
 </project-private>

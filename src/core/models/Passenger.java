@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author edangulo
  */
-public class Passenger {
+public class Passenger implements Cloneable{
     
     private final long id;
     private String firstname;
