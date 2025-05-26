@@ -5,13 +5,12 @@
 package core.models;
 
 import java.util.ArrayList;
-import org.json.JSONObject;
 
 /**
  *
  * @author edangulo
  */
-public class Plane {
+public class Plane implements Cloneable{
     
     private final String id;
     private String brand;
@@ -29,27 +28,15 @@ public class Plane {
         this.flights = new ArrayList<>();
     }
     
-    public static Plane fromJson(JSONObject obj) {
-
-        String id = obj.getString("id");
-        String brand = obj.getString("brand");
-        String model = obj.getString("model");
-        int maxCapacity = obj.getInt("maxCapacity");
-        String airline = obj.getString("airline");
-
-        return new Plane(id, brand, model, maxCapacity, airline);
-    }
-    
-    public JSONObject toJson() {
-        JSONObject obj = new JSONObject();
-
-        obj.put("id", id);
-        obj.put("brand", brand);
-        obj.put("model", model);
-        obj.put("maxCapacity", maxCapacity);
-        obj.put("airline", airline);
-
-        return obj;
+    @Override
+    public Plane clone() {
+        try {
+            Plane copy = (Plane) super.clone();
+            copy.flights = new ArrayList<>(flights); 
+            return copy;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 
     public void addFlight(Flight flight) {

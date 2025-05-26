@@ -5,15 +5,10 @@
 package core.models.storages;
 
 import core.models.Flight;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import core.models.persistences.FlightPersistence.FlightJSONPersistence;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  *
@@ -25,28 +20,30 @@ public class FlightStorage {
     
     private ArrayList<Flight> flights;
     
+    private FlightJSONPersistence persistence;
+    
     private static final String FILE_PATH = "json/flights.json";
     
-    private FlightStorage() {
-        this.flights = new ArrayList<>();
-        load();
+    private FlightStorage() throws IOException {
+        persistence = new FlightJSONPersistence(FILE_PATH);
+        this.flights = persistence.load();
     }
     
-    public static FlightStorage getInstance() {
+    public static FlightStorage getInstance() throws IOException {
         if (instance == null) {
             instance = new FlightStorage();
         }
         return instance;
     }
     
-    public boolean addFlight(Flight flight) {
+    public boolean addFlight(Flight flight) throws IOException {
         for (Flight p : this.flights) {
             if (p.getId().equals(flight.getId())) {
                 return false;
             }
         }
         this.flights.add(flight);
-        save();
+        persistence.save(flights);
         return true;
     }
     
@@ -58,42 +55,9 @@ public class FlightStorage {
         }
         return null;
     } 
-    
-    public void load() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            StringBuilder jsonText = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                jsonText.append(line);
-            }
-
-            JSONArray array = new JSONArray(jsonText.toString());
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject obj = array.getJSONObject(i);
-                flights.add(Flight.fromJson(obj, PlaneStorage.getInstance(), LocationStorage.getInstance(), PassengerStorage.getInstance())); 
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void save() {
-        JSONArray array = new JSONArray();
-        for (Flight flight : flights) {
-            array.put(flight.toJson()); 
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            writer.write(array.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     public ArrayList<Flight> getFlights() {
         flights.sort(Comparator.comparing(Flight::getId));
         return flights;
-    }
-    
-    
+    } 
 }

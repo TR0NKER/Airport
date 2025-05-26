@@ -10,6 +10,7 @@ import core.models.Flight;
 import core.models.Passenger;
 import core.models.storages.FlightStorage;
 import core.models.storages.PassengerStorage;
+import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -241,11 +242,8 @@ public class PassengerController {
 
             try {
                 passengerIdInt = Integer.parseInt(passengerId);
-                if (passengerId.equals("")) {
-                    return new Response("Id must not be empty", Status.BAD_REQUEST);
-                }
             } catch (NumberFormatException ex) {
-                return new Response("Id must be numeric", Status.BAD_REQUEST);
+                return new Response("Id must not be empty", Status.BAD_REQUEST);
             }
 
             if (!flightId.matches("^[A-Z]{3}\\d{3}$")) {
@@ -264,35 +262,47 @@ public class PassengerController {
 
     public static Response readPassenger(String id) {
         try {
-            int idInt;
+            long idLong;
 
             try {
-                idInt = Integer.parseInt(id);
-                if (id.equals("")) {
-                    return new Response("Id must not be empty", Status.BAD_REQUEST);
-                }
+                idLong = Long.parseLong(id);
             } catch (NumberFormatException ex) {
-                return new Response("Id must be numeric", Status.BAD_REQUEST);
+                return new Response("Id must not be empty", Status.BAD_REQUEST);
             }
 
             PassengerStorage storage = PassengerStorage.getInstance();
-
-            Passenger passenger = storage.getPassenger(idInt);
+            Passenger passenger = storage.getPassenger(idLong);
+            
             if (passenger == null) {
                 return new Response("Passenger not found", Status.NOT_FOUND);
             }
-            return new Response("Passenger found", Status.OK, passenger);
+            return new Response("Succesfully refreshed", Status.OK, passenger.clone());
+        } catch (Exception ex) {
+            return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    public static Response readPassengers() {
+        try {
+
+            PassengerStorage storage = PassengerStorage.getInstance();
+            ArrayList<Passenger> passengers = storage.getPassengers();
+            
+            if (passengers.getFirst()==null) {
+                return new Response("Passengers not found", Status.NOT_FOUND);
+            }
+            return new Response("Succesfully refreshed", Status.OK, passengers.clone());
         } catch (Exception ex) {
             return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public static ArrayList<Passenger> getPassengers() {
+    public static ArrayList<Passenger> getPassengers() throws IOException {
         PassengerStorage storage = PassengerStorage.getInstance();
         return storage.getPassengers();
     }
 
-    public static Passenger getPassenger(long id) {
+    public static Passenger getPassenger(long id) throws IOException {
         PassengerStorage storage = PassengerStorage.getInstance();
         return storage.getPassenger(id);
     }

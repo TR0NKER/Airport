@@ -7,7 +7,6 @@ package core.models;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
-import org.json.JSONObject;
 
 /**
  *
@@ -35,31 +34,15 @@ public class Passenger {
         this.flights = new ArrayList<>();
     }
     
-    public static Passenger fromJson(JSONObject obj) {
-
-        long id = obj.getLong("id");
-        String firstname = obj.getString("firstname");
-        String lastname = obj.getString("lastname");
-        LocalDate birthDate = LocalDate.parse(obj.getString("birthDate"));
-        int countryPhoneCode = obj.getInt("countryPhoneCode");
-        long phone = obj.getLong("phone");
-        String country = obj.getString("country");
-        
-        return new Passenger(id, firstname, lastname, birthDate, countryPhoneCode, phone, country);
-    }
-
-    public JSONObject toJson() {
-        JSONObject obj = new JSONObject();
-
-        obj.put("id", id);
-        obj.put("firstname", firstname);
-        obj.put("lastname", lastname);
-        obj.put("birthDate", birthDate);
-        obj.put("countryPhoneCode", countryPhoneCode);
-        obj.put("phone", phone);
-        obj.put("country", country);
-
-        return obj;
+    @Override
+    public Passenger clone() {
+        try {
+            Passenger copy = (Passenger) super.clone();
+            copy.flights = new ArrayList<>(flights); 
+            return copy;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 
     public void addFlight(Flight flight) {

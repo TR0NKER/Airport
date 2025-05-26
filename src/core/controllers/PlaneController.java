@@ -8,6 +8,7 @@ import core.controllers.utils.Response;
 import core.controllers.utils.Status;
 import core.models.Plane;
 import core.models.storages.PlaneStorage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -72,13 +73,28 @@ public class PlaneController {
             if (plane == null) {
                 return new Response("Plane not found", Status.NOT_FOUND);
             }
-            return new Response("Plane found", Status.OK, plane);
+            return new Response("Succesfully refreshed", Status.OK, plane.clone());
         } catch (Exception ex) {
             return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
         }
     }
     
-    public static ArrayList<Plane> getPlanes(){
+    public static Response readPlanes() {
+        try {
+
+            PlaneStorage storage = PlaneStorage.getInstance();
+            ArrayList<Plane> planes = storage.getPlanes();
+            
+            if (planes.getFirst() == null) {
+                return new Response("Planes not found", Status.NOT_FOUND);
+            }
+            return new Response("Succesfully refreshed", Status.OK, planes.clone());
+        } catch (Exception ex) {
+            return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    public static ArrayList<Plane> getPlanes() throws IOException{
         PlaneStorage storage = PlaneStorage.getInstance();
         return storage.getPlanes();
     }

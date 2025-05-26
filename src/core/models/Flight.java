@@ -4,19 +4,15 @@
  */
 package core.models;
 
-import core.models.storages.LocationStorage;
-import core.models.storages.PassengerStorage;
-import core.models.storages.PlaneStorage;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 /**
  *
  * @author edangulo
  */
-public class Flight {
+public class Flight implements Cloneable{
 
     private final String id;
     private ArrayList<Passenger> passengers;
@@ -58,76 +54,20 @@ public class Flight {
 
         this.plane.addFlight(this);
     }
-
-    public static Flight fromJson(JSONObject obj, PlaneStorage planeStorage, LocationStorage locationStorage, PassengerStorage passengerStorage) {
-
-        String id = obj.getString("id");
-        String planeId = obj.getString("plane");
-        String departureLocationId = obj.getString("departureLocation");
-        String arrivalLocationId = obj.getString("arrivalLocation");
-        LocalDateTime departureDate = LocalDateTime.parse(obj.getString("departureDate"));
-        int hoursArrival = obj.getInt("hoursDurationArrival");
-        int minutesArrival = obj.getInt("minutesDurationArrival");
-        
-        Plane plane = planeStorage.getPlane(planeId);
-        Location departureLocation = locationStorage.getLocation(departureLocationId);
-        Location arrivalLocation = locationStorage.getLocation(arrivalLocationId);
-        
-        Flight flight;
-
-        if (obj.has("scaleLocation") && !obj.isNull("scaleLocation")) {
-            String scaleLocationId = obj.getString("scaleLocation");
-            int hoursScale = obj.getInt("hoursDurationScale");
-            int minutesScale = obj.getInt("minutesDurationScale");
-            
-            Location scaleLocation = locationStorage.getLocation(scaleLocationId);
-
-            flight = new Flight(id, plane, departureLocation, scaleLocation, arrivalLocation, departureDate, hoursArrival, minutesArrival, hoursScale, minutesScale);
-        } else {
-            flight = new Flight(id, plane, departureLocation, arrivalLocation, departureDate, hoursArrival, minutesArrival);
+    
+    @Override
+    public Flight clone() {
+        try {
+            Flight copy = (Flight) super.clone();
+            copy.passengers = new ArrayList<>(passengers); 
+            copy.plane = plane.clone();
+            copy.arrivalLocation = arrivalLocation.clone();
+            copy.departureLocation = departureLocation.clone();
+            copy.scaleLocation = scaleLocation.clone();
+            return copy;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
         }
-        
-        plane.addFlight(flight);
-        
-        if (obj.has("passengers")) {
-            JSONArray passengerArray = obj.getJSONArray("passengers");
-            for (int i = 0; i < passengerArray.length() ; i++) {
-                long passengerId = passengerArray.getLong(i);
-                Passenger passenger = passengerStorage.getPassenger(passengerId);
-                passenger.addFlight(flight);
-                flight.addPassenger(passenger);
-            }
-        }
-        
-        return flight;
-    }
-
-    public JSONObject toJson() {
-        JSONObject obj = new JSONObject();
-
-        obj.put("id", id);
-        obj.put("plane", plane.getId());
-        obj.put("departureLocation", departureLocation.getAirportId());
-        obj.put("arrivalLocation", arrivalLocation.getAirportId());
-        obj.put("departureDate", departureDate.toString());
-        obj.put("hoursDurationArrival", hoursDurationArrival);
-        obj.put("minutesDurationArrival", minutesDurationArrival);
-
-        if (scaleLocation != null) {
-            obj.put("scaleLocation", scaleLocation.getAirportId());
-            obj.put("hoursDurationScale", hoursDurationScale);
-            obj.put("minutesDurationScale", minutesDurationScale);
-        } else {
-            obj.put("scaleLocation", JSONObject.NULL);
-        }
-
-        JSONArray passengerArray = new JSONArray();
-        for (Passenger p : passengers) {
-            passengerArray.put(p.getId());
-        }
-        obj.put("passengers", passengerArray);
-
-        return obj;
     }
 
     public void addPassenger(Passenger passenger) {

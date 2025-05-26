@@ -8,6 +8,7 @@ import core.controllers.utils.Response;
 import core.controllers.utils.Status;
 import core.models.Location;
 import core.models.storages.LocationStorage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -93,13 +94,28 @@ public class LocationController {
             if (location == null) {
                 return new Response("Location not found", Status.NOT_FOUND);
             }
-            return new Response("Location found", Status.OK, location);
+            return new Response("Succesfully refreshed", Status.OK, location.clone());
         } catch (Exception ex) {
             return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
         }
     }
     
-    public static ArrayList<Location> getLocations(){
+    public static Response readLocations() {
+        try {
+
+            LocationStorage storage = LocationStorage.getInstance();
+            ArrayList<Location> locations = storage.getLocations();
+            
+            if (locations.getFirst() == null) {
+                return new Response("Locations not found", Status.NOT_FOUND);
+            }
+            return new Response("Succesfully refreshed", Status.OK, locations.clone());
+        } catch (Exception ex) {
+            return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    public static ArrayList<Location> getLocations() throws IOException{
         LocationStorage storage = LocationStorage.getInstance();
         return storage.getLocations();
     }

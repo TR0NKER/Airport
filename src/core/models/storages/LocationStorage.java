@@ -5,16 +5,10 @@
 package core.models.storages;
 
 import core.models.Location;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import core.models.persistences.LocationPersistence.LocationJSONPersistence;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 /**
  *
  * @author DANIEL
@@ -25,28 +19,30 @@ public class LocationStorage {
     
     private ArrayList<Location> locations;
     
+    private LocationJSONPersistence persistence;
+    
     private static final String FILE_PATH = "json/locations.json";
     
-    private LocationStorage() {
-        this.locations = new ArrayList<>();
-        load();
+    private LocationStorage() throws IOException {
+        persistence = new LocationJSONPersistence(FILE_PATH);
+        this.locations = persistence.load();   
     }
     
-    public static LocationStorage getInstance() {
+    public static LocationStorage getInstance() throws IOException {
         if (instance == null) {
             instance = new LocationStorage();
         }
         return instance;
     }
     
-    public boolean addLocation(Location location) {
+    public boolean addLocation(Location location) throws IOException {
         for (Location l : this.locations) {
             if (l.getAirportId().equals(location.getAirportId())) {
                 return false;
             }
         }
         this.locations.add(location);
-        save();
+        persistence.save(locations);
         return true;
     }
     
@@ -57,37 +53,6 @@ public class LocationStorage {
             }
         }
         return null;
-    }
-    
-    public void load() {
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            StringBuilder jsonText = new StringBuilder();
-            String line;
-            while ((line = reader.readLine()) != null) {
-                jsonText.append(line);
-            }
-
-            JSONArray array = new JSONArray(jsonText.toString());
-            for (int i = 0; i < array.length(); i++) {
-                JSONObject obj = array.getJSONObject(i);
-                locations.add(Location.fromJson(obj)); 
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void save() {
-        JSONArray array = new JSONArray();
-        for (Location location : locations) {
-            array.put(location.toJson()); 
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            writer.write(array.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public ArrayList<Location> getLocations() {

@@ -11,15 +11,15 @@ package core.controllers.utils;
 public class Response {
     
     private String message;
-    private int status;
+    private Status status;
     private Object object;
 
-    public Response(String message, int status) {
+    public Response(String message, Status status) {
         this.message = message;
         this.status = status;
     }
     
-    public Response(String message, int status, Object object) {
+    public Response(String message, Status status, Object object) {
         this.message = message;
         this.status = status;
         this.object = object;
@@ -29,7 +29,7 @@ public class Response {
         return message;
     }
 
-    public int getStatus() {
+    public Status getStatus() {
         return status;
     }
 

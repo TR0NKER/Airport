@@ -12,6 +12,7 @@ import core.models.Location;
 import core.models.storages.FlightStorage;
 import core.models.storages.PlaneStorage;
 import core.models.storages.LocationStorage;
+import java.io.IOException;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -193,13 +194,28 @@ public class FlightController {
             if (flight == null) {
                 return new Response("Flight not found", Status.NOT_FOUND);
             }
-            return new Response("Flight found", Status.OK, flight);
+            return new Response("Succesfully refreshed", Status.OK, flight.clone());
+        } catch (Exception ex) {
+            return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    public static Response readFlights() {
+        try {
+
+            FlightStorage storage = FlightStorage.getInstance();
+            ArrayList<Flight> flights = storage.getFlights();
+
+            if (flights.getFirst() == null) {
+                return new Response("Flights not found", Status.NOT_FOUND);
+            }
+            return new Response("Succesfully refreshed", Status.OK, flights.clone());
         } catch (Exception ex) {
             return new Response("Unexpected error", Status.INTERNAL_SERVER_ERROR);
         }
     }
 
-    public static ArrayList<Flight> getFlights() {
+    public static ArrayList<Flight> getFlights() throws IOException {
         FlightStorage storage = FlightStorage.getInstance();
         return storage.getFlights();
     }

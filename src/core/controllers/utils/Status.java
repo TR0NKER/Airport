@@ -8,19 +8,23 @@ package core.controllers.utils;
  *
  * @author HP
  */
-public abstract class Status {
-    
-    // Successful response
-    public static final int OK = 200;
-    public static final int CREATED = 201;
-    public static final int NO_CONTENT = 204;
-    
-    // Client error response
-    public static final int BAD_REQUEST = 400;
-    public static final int NOT_FOUND = 404;
-    
-    // Server error response
-    public static final int INTERNAL_SERVER_ERROR = 500;
-    public static final int NOT_IMPLEMENTED = 501;
-    
+public enum Status {
+    OK(200),
+    CREATED(201),
+    NO_CONTENT(204),
+    BAD_REQUEST(400),
+    NOT_FOUND(404),
+    INTERNAL_SERVER_ERROR(500),
+    NOT_IMPLEMENTED(501);
+
+    private final int code;
+
+    Status(int code) {
+        this.code = code;
+    }
+
+    public int getCode() {
+        return code;
+    }
 }
+

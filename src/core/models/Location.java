@@ -4,8 +4,6 @@
  */
 package core.models;
 
-import org.json.JSONObject;
-
 /**
  *
  * @author edangulo
@@ -27,30 +25,14 @@ public class Location {
         this.airportLatitude = airportLatitude;
         this.airportLongitude = airportLongitude;
     }
-
-    public static Location fromJson(JSONObject obj) {
-
-        String airportId = obj.getString("airportId");
-        String airportName = obj.getString("airportName");
-        String airportCity = obj.getString("airportCity");
-        String airportCountry = obj.getString("airportCountry");
-        double airportLatitude = obj.getDouble("airportLatitude");
-        double airportLongitude = obj.getDouble("airportLongitude");
-
-        return new Location(airportId, airportName, airportCity, airportCountry, airportLatitude, airportLongitude);
-    }
     
-    public JSONObject toJson() {
-        JSONObject obj = new JSONObject();
-
-        obj.put("airportId", airportId);
-        obj.put("airportName", airportName);
-        obj.put("airportCity", airportCity);
-        obj.put("airportCountry", airportCountry);
-        obj.put("airportLatitude", airportLatitude);
-        obj.put("airportLongitude", airportLongitude);
-
-        return obj;
+    @Override
+    public Location clone() {
+        try {
+            return (Location) super.clone();  
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 
     public String getAirportId() {
